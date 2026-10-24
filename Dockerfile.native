@@ -1,0 +1,7 @@
+# This exact local CUDA base was measured in NATIVE_GPU_BENCHMARK.md.
+FROM michaelf34/infinity@sha256:11e8b3921b9f1a58965afaad4a844c435c9807cbc82c51e47cb147b7d977fc88
+RUN python -m pip install --no-cache-dir kokoro==0.9.4 misaki==0.9.4 numpy==1.26.4 huggingface-hub==0.34.4 loguru==0.7.3 soundfile==0.12.1
+WORKDIR /app
+COPY native_speech_server.py speech_engines.py /app/
+ENV HF_HOME=/tmp/huggingface HF_HUB_OFFLINE=1 HF_HUB_DISABLE_IMPLICIT_TOKEN=1 PYTHONDONTWRITEBYTECODE=1
+ENTRYPOINT ["python", "/app/native_speech_server.py"]

@@ -1,0 +1,4 @@
+# Optional local audit environment, separate from the production service.
+faster-whisper==1.2.1
+# PyAV 19 removed an argument used by faster-whisper 1.2.1's decoder.
+av==16.1.0

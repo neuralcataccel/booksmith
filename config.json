@@ -1,0 +1,37 @@
+{
+  "name": "Booksmith",
+  "host": "127.0.0.1",
+  "port": 8787,
+  "public_url": "http://127.0.0.1:8787",
+  "library_root": "C:/Calibre Library",
+  "runtime_root": "C:/Booksmith",
+  "calibre_container": "calibre",
+  "calibre_exchange": "C:/Booksmith/calibre-exchange",
+  "output_root": "C:/Audiobooks/Booksmith",
+  "staging_root": "C:/Audiobooks/Booksmith-Staging",
+  "plex_output_root": "C:/Audiobooks/Booksmith",
+  "plex_url": "http://127.0.0.1:32400",
+  "plex_web_url": "http://127.0.0.1:32400/web/index.html",
+  "plex_section": 0,
+  "cpu_threads": 6,
+  "speech_backend": "cpu",
+  "intermediate_retention_hours": 0,
+  "model_sha256": "beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a",
+  "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+  "contextual_pauses": false,
+  "jev_monthly_limit_usd": 18,
+  "jev_owner_limit_usd": 1.25,
+  "allowed_networks": [
+    "127.0.0.0/8",
+    "::1/128"
+  ],
+  "allowed_hosts": [
+    "localhost",
+    "127.0.0.1",
+    "[::1]"
+  ],
+  "public_hostname": null,
+  "trusted_proxy_peers": [],
+  "jev_connection_file": "C:/Booksmith/private/jev-connection.json",
+  "jev_url": "http://127.0.0.1:4000/Jev/decide"
+}

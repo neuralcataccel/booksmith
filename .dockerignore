@@ -1,0 +1,4 @@
+**
+!Dockerfile.native
+!native_speech_server.py
+!speech_engines.py

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111a19"><title>Booksmith — from shelf to speaker</title>
+  <link rel="icon" href="/static/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/static/style.css?v=2757e91bb13a">
+  <script src="/static/app.js?v=01cf80c578a7" defer></script><script src="/static/review.js?v=6e33e49aa648" defer></script><link rel="stylesheet" href="/static/review.css?v=3f1ed4f78940">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Booksmith home"><img src="/static/mark.svg" alt=""><span>booksmith<span class="brand-dot">.</span></span></a>
+    <div class="workspace">YOUR LIBRARY</div>
+    <nav aria-label="Main navigation">
+      <button class="nav-item active" id="nav-library" data-view="library"><span aria-hidden="true">▤</span> Your library <span class="nav-count" id="nav-total">—</span></button>
+      <button class="nav-item" id="nav-queue" data-view="queue"><span aria-hidden="true">◷</span> Conversions <span class="nav-count" id="nav-queued">0</span></button>
+      <button class="nav-item hidden" id="nav-auditions" data-view="auditions"><span aria-hidden="true">♫</span> Voice auditions</button>
+    </nav>
+    <div class="sidebar-note"><div class="small-icon">↗</div><strong>Made for your Plex.</strong><p>Choose a book here.<br>Listen where you already do.</p></div>
+    <div class="local-status"><span class="status-dot"></span><div>All narration stays at home<small>Local speech · optional text checks</small></div></div>
+  </aside>
+  <main>
+    <header class="topbar"><span class="breadcrumb" id="breadcrumb">YOUR LIBRARY</span><div class="topbar-right"><span class="pill" id="system-state">Connecting</span><span class="avatar">TB</span></div></header>
+    <section id="library-view" class="view">
+      <div class="hero"><div><div class="eyebrow"><span class="tiny-line"></span> FROM SHELF TO SPEAKER</div><h1>A good book.<br>A whole new way to hear it.</h1><p>Your Calibre collection, ready for its next chapter.</p></div><div class="hero-art" aria-hidden="true"><div class="book-spine spine-one">STORIES</div><div class="book-spine spine-two">AFTER HOURS</div><div class="book-spine spine-three">ONE MORE CHAPTER</div><div class="sound-rings"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+      <div class="stat-row"><div><strong id="stat-books">—</strong><span>books on your shelves</span></div><div><strong id="stat-supported">—</strong><span>ready to convert</span></div><div><strong id="stat-ready">0</strong><span>delivered to Plex</span></div><div class="stat-last"><span class="status-dot"></span><span id="narrator-state">Your narrator is ready</span></div></div>
+      <div class="library-tools"><div><h2>Find your next listen</h2><p id="results-label">Loading your collection…</p></div><button class="text-button" id="refresh-catalogue">↻ Refresh shelves</button></div>
+      <form class="searchbox" id="search-form"><span aria-hidden="true">⌕</span><input id="search-input" type="search" autocomplete="off" placeholder="Search titles, authors, or a series…" aria-label="Search Calibre books"><kbd>/</kbd></form>
+      <div class="filter-row"><label class="filter-toggle"><input type="checkbox" id="convertible-only" checked> Show supported formats</label><span class="format-note">EPUB · MOBI · AZW3 · TXT</span></div>
+      <div class="book-grid" id="book-grid" aria-live="polite"></div>
+      <div class="empty hidden" id="library-empty"><h3>No books on this shelf.</h3><p>Try a shorter title, an author, or a series name.</p></div>
+      <div class="pagination"><button class="secondary" id="prev-page">← Previous</button><span id="page-label"></span><button class="secondary" id="next-page">Next →</button></div>
+    </section>
+    <section id="queue-view" class="view hidden"><div class="queue-header"><div class="eyebrow"><span class="tiny-line"></span> THE RECORDING ROOM</div><h1>Good stories take a little time.</h1><p>Follow each book from your shelves to Plex.</p></div><div class="queue-legend"><span><i class="status-dot"></i> Narration is generated locally, chapter by chapter.</span><span>Safe to close this page.</span></div><div id="queue-list" aria-live="polite"></div><div class="empty hidden" id="queue-empty"><span class="empty-book">▤</span><h3>Your next listen is waiting.</h3><p>Pick a book from the library to start a conversion.</p><button class="primary" data-view="library">Browse your library →</button></div></section>
+    <section id="auditions-view" class="view hidden"><div class="queue-header"><div class="eyebrow">THE LISTENING ROOM</div><h1>Find the voice you want to follow.</h1><p>The same short passage, several narrators. Listen for clarity, consistency and the amount of expression you enjoy.</p></div><blockquote class="audition-script" id="audition-script"></blockquote><div id="audition-list"></div><p class="field-help">Experimental samples do not change the narrator for queued books. Expressive-engine samples still need a longer listening test before full-book use.</p></section>
+    <footer>YOUR BOOKS. YOUR VOICE. YOUR PLEX.<span>Booksmith · proof of concept</span></footer>
+  </main>
+</div>
+<div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+<section class="drawer hidden" id="book-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer-top"><span class="eyebrow">MAKE IT YOUR NEXT LISTEN</span><button class="icon-button" id="close-drawer" aria-label="Close book details">×</button></div>
+  <div class="selected-book"><div id="drawer-cover" class="selected-cover"></div><div><span class="book-format" id="drawer-format"></span><h2 id="drawer-title"></h2><p id="drawer-author"></p><span id="drawer-series"></span></div></div>
+  <p class="book-description" id="drawer-description"></p>
+  <div id="unavailable" class="notice warning hidden"></div>
+  <div class="profile-panel"><label class="field-label" for="reading-profile">SAVED READING PROFILE</label><select id="reading-profile"><option value="">Custom settings</option></select><div class="profile-save"><input id="profile-name" maxlength="80" placeholder="Name these settings" aria-label="Profile name"><button class="secondary" id="save-profile">Save profile</button></div><p class="field-help">Shared with the family. Books already queued keep their settings.</p></div>
+  <div class="section-label"><span>01</span> Choose your narrator</div>
+  <label class="field-label" for="voice">VOICE · ENGLISH</label><select id="voice"></select>
+  <div class="section-label"><span>02</span> Set the pace</div>
+  <div class="style-options" id="style-options"></div><p class="field-help" id="style-help"></p>
+  <div class="range-heading"><label for="pace">Fine-tune speed</label><output id="pace-label">1.00×</output></div><input id="pace" type="range" min="0.75" max="1.25" step="0.05" value="1"><div class="range-labels"><span>Take your time</span><span>Turn the page</span></div>
+  <details class="tuning-details"><summary>Pauses and pronunciation</summary><label class="checkbox-row"><input type="checkbox" id="paragraph-pauses"><span>Pause at paragraph boundaries<small>Avoid extra silence at technical splits inside a paragraph.</small></span></label><div class="pause-fields"><label>Paragraph pause (seconds)<input id="paragraph-pause" type="number" min="0" max="2" step="0.05" value="0.35"></label><label>Chapter pause (seconds)<input id="chapter-pause" type="number" min="0" max="5" step="0.1" value="0.9"></label></div><label class="field-label" for="dictionary-scope">PRONUNCIATION DICTIONARY</label><select id="dictionary-scope"><option value="book">This book</option><option value="series">This Calibre series</option></select><textarea id="pronunciations" rows="4" placeholder="McGregor = muh gregor" aria-label="Pronunciation corrections, one word equals spoken form per line"></textarea><p class="field-help">One “word = spoken form” per line. Save corrections before previewing. Book rules override series rules. Original text stays intact.</p><button class="secondary" id="save-pronunciations">Save pronunciations</button></details>
+  <div class="chapter-picker"><label class="field-label" for="chapter-selection">BOOK OR STORY</label><select id="chapter-selection"><option value="">Entire book</option></select><p class="field-help" id="chapter-help">Choose one chapter or story for a short conversion.</p></div>
+  <details class="tuning-details context-panel"><summary>Context-guided pronunciation</summary><p class="field-help">Review ambiguous words such as read, lead and bass. Your choices apply to individual occurrences.</p><label class="checkbox-row"><input type="checkbox" id="use-context-pronunciations" checked><span>Use my approved readings<small>For new previews and conversions; existing editions keep their narration.</small></span></label><p class="field-help" id="context-voice-help">Available with American English voices, including Eric.</p><button class="secondary" id="open-pronunciations">Review readings in this book</button></details>
+  <div class="preview-panel"><button class="secondary" id="preview-button">▶ Preview this book</button><span id="preview-status">Hear a passage from the selected book or story.</span><audio id="preview-player" controls class="hidden" preload="none"></audio></div>
+  <div class="section-label"><span>03</span> Keep the story flowing</div>
+  <label class="checkbox-row"><input type="checkbox" id="skip-frontmatter" checked><span>Skip title pages and publication information<small>When those sections are identified in the ebook.</small></span></label>
+  <label class="checkbox-row"><input type="checkbox" id="skip-notes" checked><span>Skip footnotes and endnotes<small>Applies to notes marked in the ebook.</small></span></label>
+  <div class="delivery-card"><span>↗</span><div><strong>Delivered to Plex</strong><p>Numbered chapters, cover art, and book details.<br><span id="delivery-library">AudioBook</span> library · local narration</p></div></div>
+  <label class="checkbox-row"><input type="checkbox" id="contextual-pauses" checked><span>Context-aware pauses<small>Review sentence and paragraph rhythm for this audiobook. Uses hosted text analysis.</small></span></label>
+  <div class="drawer-action"><button class="primary" id="convert-button">Create audiobook <span>→</span></button><p>You can close this page. We’ll keep narrating.</p></div>
+</section>
+<dialog id="pronunciation-dialog" class="review-dialog"><div class="review-scroll"><div class="drawer-top"><span class="eyebrow">CONTEXT-GUIDED PRONUNCIATION</span><button class="icon-button" id="close-pronunciations" aria-label="Close pronunciation review">×</button></div><h2 id="pronunciation-title"></h2><p id="pronunciation-voice"></p><label class="field-label" for="pronunciation-chapter">CHAPTER OR STORY TO CHECK</label><select id="pronunciation-chapter"></select><p class="field-help">Optional hosted text analysis suggests known readings. You approve each occurrence. Audio is generated locally.</p><div class="review-actions"><button class="primary" id="find-pronunciations">Find suggestions</button><button class="secondary" id="refresh-pronunciations">Refresh</button></div><p id="pronunciation-status" role="status"></p><div id="pronunciation-list"></div></div><div class="review-player"><p id="pronunciation-preview-status" role="status">Choose a reading and compare it with the usual narration.</p><audio id="pronunciation-preview-player" aria-label="Pronunciation preview" controls preload="none" class="hidden"></audio></div></dialog>
+<dialog id="quality-dialog" class="review-dialog"><div class="review-scroll"><div class="drawer-top"><span class="eyebrow">LISTENING CHECKS</span><button class="icon-button" id="close-quality" aria-label="Close quality checks">×</button></div><h2 id="quality-title"></h2><p id="quality-status" role="status"></p><button class="secondary" id="run-quality">Run sample checks</button><div id="quality-results"></div></div><div class="review-player"><p id="quality-player-label">Choose a passage to hear its chapter at the approximate position.</p><audio id="quality-player" aria-label="Chapter listening check" controls preload="none" class="hidden"></audio></div></dialog>
+<div class="toast hidden" id="toast" role="status"></div>
+<dialog id="repair-dialog" class="repair-dialog"><form id="repair-form"><div class="drawer-top"><span class="eyebrow">REPAIR ONE CHAPTER</span><button type="button" class="icon-button" id="close-repair" aria-label="Close repair">×</button></div><h2 id="repair-title"></h2><p>Save pronunciation corrections in the book's settings first. This keeps the existing narrator and pace, uses those corrections for one chapter, and splits long passages more finely.</p><label class="field-label" for="repair-chapter">CHAPTER TO REGENERATE</label><select id="repair-chapter"></select><p>The other chapters keep their audio. You can listen before approving a separate complete edition; the original stays in Plex.</p><button class="primary" id="start-repair" type="submit">Prepare chapter repair</button></form></dialog>
+</body>
+</html>
