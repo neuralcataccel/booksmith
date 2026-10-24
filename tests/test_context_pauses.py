@@ -164,12 +164,22 @@ def test_existing_worker_publishes_contextual_edition_and_retains_plans(parent_e
         key='keep' if 'keep' in choices else next(k for k,v in choices.items() if k!='unknown' and 'Add no silence' in v)
         return {'answer':{'choice':key,'confidence':1},'model':'test','cost':0,'request_key':cp.digest(payload)}
     monkeypatch.setattr(cp.jev_client,'decide',keep)
+    assemble=cp.chapter
+    def with_pause(*args,**kwargs):
+        paths,receipt=assemble(*args,**kwargs)
+        data,rate=sf.read(paths[-1],dtype='float32')
+        sf.write(paths[-1],np.concatenate([data,np.zeros(12000,dtype=np.float32)]),rate,subtype='PCM_16')
+        args[4]['chunks'][-1]['duration']+=.5
+        receipt['audio_seconds']+=.5;receipt['inserted_samples']+=12000
+        return paths,receipt
+    monkeypatch.setattr(cp,'chapter',with_pause)
     opts=cp.attach(json.loads(parent['options']))
     request=store.create_job('book',{'id':1,'title':parent['title'],'author':parent['author']},opts,speech.cache_key(1,opts,opts['source_sha256']))
     worker.process_book(store.claim_next())
     result=store.get_job(request['id']);assert result['status']=='awaiting_plex'
     manifest=json.loads((Path(result['output_path'])/'booksmith.json').read_text(encoding='utf-8'))
     assert manifest['contextual_pauses']==cp.POLICY
+    assert result['audio_seconds']==pytest.approx(manifest['audio_seconds'])
     assert len(manifest['render_index']['chapters'])==2
     assert all('contextual_pauses' in c for c in manifest['render_index']['chapters'])
     assert len(list((work/request['id']/'pause-plans').glob('chapter-*.json')))==2
